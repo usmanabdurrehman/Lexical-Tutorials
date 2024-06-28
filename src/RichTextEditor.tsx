@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 
 import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
@@ -7,9 +7,9 @@ import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 
-import ToolbarPlugin from "./ToolbarPlugin";
+import { ToolbarPlugin } from "./Plugins";
 import { css } from "@emotion/css";
-import { CustomOnChangePlugin } from "./CustomOnChangePlugin";
+import { CustomOnChangePlugin } from "./Plugins/CustomOnChangePlugin";
 import { Box } from "@chakra-ui/react";
 
 import { HeadingNode } from "@lexical/rich-text";
@@ -37,34 +37,33 @@ const theme: EditorThemeClasses = {
       background: "#eee",
       color: "black",
       padding: 2,
+      border: "1px solid #ccc",
     }),
   },
 };
 
-const initialConfig = {
-  namespace: "MyEditor",
-  theme,
-  onError: () => {},
-  nodes: [HeadingNode, CodeNode, CodeHighlightNode],
-};
-
-interface RichTextEditorProps {}
-
-const placeholder = "Enter text";
+interface RichTextEditorProps {
+  name: string;
+  placeholder?: string;
+  onChange: (value: string) => void;
+  value: string;
+}
 
 export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
-  function RichTextEditor() {
-    const [value, setValue] = useState("");
-
-    const onChange = (newValue: string) => {
-      setValue(newValue);
-    };
+  function RichTextEditor({ name, onChange, value, placeholder }) {
+    const initialConfig = useMemo(() => {
+      return {
+        namespace: name,
+        theme,
+        onError: () => {},
+        nodes: [HeadingNode, CodeNode, CodeHighlightNode],
+      };
+    }, [name]);
 
     return (
       <LexicalComposer initialConfig={initialConfig}>
         <Box width="auto">
           <ToolbarPlugin />
-
           <Box
             bg="#fff"
             pos="relative"

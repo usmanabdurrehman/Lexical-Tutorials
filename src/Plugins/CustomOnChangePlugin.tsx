@@ -41,7 +41,6 @@ export const CustomOnChangePlugin: React.FC<any> = React.memo(
       <OnChangePlugin
         onChange={(editorState) => {
           editorState.read(() => {
-            //  editor.getRootElement()?.textContent
             onChange($generateHtmlFromNodes(editor));
           });
         }}

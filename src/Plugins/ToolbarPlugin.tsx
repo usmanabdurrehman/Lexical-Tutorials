@@ -9,33 +9,21 @@ import {
   CAN_UNDO_COMMAND,
   FORMAT_ELEMENT_COMMAND,
   FORMAT_TEXT_COMMAND,
-  KEY_ENTER_COMMAND,
   REDO_COMMAND,
   SELECTION_CHANGE_COMMAND,
-  TextNode,
   UNDO_COMMAND,
 } from "lexical";
 import { $wrapNodes } from "@lexical/selection";
 import { $createHeadingNode, HeadingTagType } from "@lexical/rich-text";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { RichTextAction, RICH_TEXT_OPTIONS } from "./constants";
-import { useKeyBindings } from "./hooks";
-import ColorPicker from "./Components/ColorPicker";
-
-const LowPriority = 1;
-
-const HEADINGS = ["h1", "h2", "h3", "h4", "h5", "h6"];
-
-const getStyleValue = (style: string, key: string) => {
-  return style
-    .split(";")
-    .map((rule) => rule.split(": "))
-    .filter(([ruleName]) => {
-      return ruleName === key;
-    })?.[0]?.[1];
-};
-
-const Divider = () => <Box width="1px" bg="#f4f4f4" margin="0 6px" h={4}></Box>;
+import { useEffect, useState } from "react";
+import {
+  HEADINGS,
+  LOW_PRIORIRTY,
+  RichTextAction,
+  RICH_TEXT_OPTIONS,
+} from "../constants";
+import { useKeyBindings } from "../hooks";
+import { Divider } from "../Components/Divider";
 
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
@@ -50,8 +38,6 @@ export default function ToolbarPlugin() {
   const [isSuperscript, setIsSuperscript] = useState(false);
   const [isSubscript, setIsSubscript] = useState(false);
   const [isCode, setIsCode] = useState(false);
-  const [color, setColor] = useState("#000000");
-  const [bgColor, setBgColor] = useState("#ffffff");
 
   const actionCurrentMap: { [id: string]: boolean } = {
     [RichTextAction.Bold]: isBold,
@@ -69,7 +55,7 @@ export default function ToolbarPlugin() {
     [RichTextAction.Redo]: !canRedo,
   };
 
-  const $updateToolbar = useCallback(() => {
+  const $updateToolbar = () => {
     const selection = $getSelection();
     if ($isRangeSelection(selection)) {
       // Update text format
@@ -81,20 +67,8 @@ export default function ToolbarPlugin() {
       setIsSuperscript(selection.hasFormat("superscript"));
       setIsSubscript(selection.hasFormat("subscript"));
       setIsCode(selection.hasFormat("code"));
-      const style = (
-        selection
-          .getNodes()
-          .filter((node) => !!(node as TextNode)?.getStyle) as TextNode[]
-      ).map((node) => {
-        return node.getStyle();
-      })?.[0];
-      if (!style) return;
-
-      setColor(getStyleValue(style, "color"));
-      setBgColor(getStyleValue(style, "background"));
     }
-  }, []);
-
+  };
   const updateHeadings = (heading: HeadingTagType) => {
     editor.update(() => {
       const selection = $getSelection();
@@ -102,21 +76,6 @@ export default function ToolbarPlugin() {
       if ($isRangeSelection(selection)) {
         console.log({ inHeading: heading });
         $wrapNodes(selection, () => $createHeadingNode(heading));
-      }
-    });
-  };
-
-  const updateColor = (color: string) => {
-    editor.update(() => {
-      const selection = $getSelection();
-      console.log({ selection });
-
-      if ($isRangeSelection(selection)) {
-        console.log("yo", selection);
-        selection.getNodes().forEach((node) => {
-          if ((node as TextNode)?.setStyle)
-            (node as TextNode)?.setStyle(`color: ${color}`);
-        });
       }
     });
   };
@@ -134,7 +93,7 @@ export default function ToolbarPlugin() {
           $updateToolbar();
           return false;
         },
-        LowPriority
+        LOW_PRIORIRTY
       ),
       editor.registerCommand(
         CAN_UNDO_COMMAND,
@@ -142,7 +101,7 @@ export default function ToolbarPlugin() {
           setCanUndo(payload);
           return false;
         },
-        LowPriority
+        LOW_PRIORIRTY
       ),
       editor.registerCommand(
         CAN_REDO_COMMAND,
@@ -150,7 +109,7 @@ export default function ToolbarPlugin() {
           setCanRedo(payload);
           return false;
         },
-        LowPriority
+        LOW_PRIORIRTY
       )
     );
   }, [editor, $updateToolbar]);
@@ -263,14 +222,6 @@ export default function ToolbarPlugin() {
             />
           )
         )}
-        <Box
-          h={3}
-          w={3}
-          border="1px solid #333"
-          bg={color}
-          cursor="pointer"
-        ></Box>
-        <ColorPicker onClick={updateColor} />
       </ButtonGroup>
     </Flex>
   );

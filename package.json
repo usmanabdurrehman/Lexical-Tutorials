@@ -16,6 +16,8 @@
     "@lexical/react": "^0.16.0",
     "@tanstack/react-query": "^5.32.1",
     "axios": "^1.2.2",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
     "framer-motion": "^10.11.2",
     "lexical": "^0.16.0",
     "react": "^18.2.0",
