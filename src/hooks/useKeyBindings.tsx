@@ -1,7 +1,7 @@
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { KEY_ENTER_COMMAND } from "lexical";
 import { useEffect } from "react";
-import { RichTextAction } from "../constants";
+import { LOW_PRIORIRTY, RichTextAction } from "../constants";
 
 export const useKeyBindings = ({
   onAction,
@@ -14,7 +14,6 @@ export const useKeyBindings = ({
     editor.registerCommand(
       KEY_ENTER_COMMAND,
       (event) => {
-        console.log({ event });
         if (event?.key === "B" && event?.ctrlKey) {
           onAction(RichTextAction.Bold);
         }
@@ -32,7 +31,7 @@ export const useKeyBindings = ({
         }
         return false;
       },
-      1
+      LOW_PRIORIRTY
     );
   }, [onAction]);
 };

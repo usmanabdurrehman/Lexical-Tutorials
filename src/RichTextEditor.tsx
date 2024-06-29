@@ -62,7 +62,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
 
     return (
       <LexicalComposer initialConfig={initialConfig}>
-        <Box width="auto">
+        <Box>
           <ToolbarPlugin />
           <Box
             bg="#fff"
@@ -78,7 +78,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
                     overflow: auto;
                     font-size: 12px;
                     padding: 8px;
-                    outline:none;
+                    outline: none;
                 `)}
                 />
               }

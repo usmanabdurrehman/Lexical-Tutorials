@@ -74,7 +74,6 @@ export default function ToolbarPlugin() {
       const selection = $getSelection();
 
       if ($isRangeSelection(selection)) {
-        console.log({ inHeading: heading });
         $wrapNodes(selection, () => $createHeadingNode(heading));
       }
     });
@@ -176,7 +175,7 @@ export default function ToolbarPlugin() {
         editor.dispatchCommand(UNDO_COMMAND, undefined);
         break;
       }
-      case RichTextAction.JustifyAlign: {
+      case RichTextAction.Redo: {
         editor.dispatchCommand(REDO_COMMAND, undefined);
         break;
       }
