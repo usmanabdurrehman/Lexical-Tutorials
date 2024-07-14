@@ -10,20 +10,56 @@ import { Divider } from "../Components/Divider";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import {
   $getSelection,
+  $insertNodes,
   $isRangeSelection,
+  $isRootOrShadowRoot,
   CAN_REDO_COMMAND,
   CAN_UNDO_COMMAND,
+  createCommand,
   FORMAT_ELEMENT_COMMAND,
   FORMAT_TEXT_COMMAND,
+  LexicalCommand,
   REDO_COMMAND,
   SELECTION_CHANGE_COMMAND,
   UNDO_COMMAND,
 } from "lexical";
-import { useEffect, useState } from "react";
-import { mergeRegister } from "@lexical/utils";
+import { useEffect, useRef, useState } from "react";
+import {
+  $insertFirst,
+  $insertNodeToNearestRoot,
+  mergeRegister,
+} from "@lexical/utils";
 import { HeadingTagType, $createHeadingNode } from "@lexical/rich-text";
 import { $wrapNodes } from "@lexical/selection";
 import { useKeyBindings } from "../hooks/useKeyBindings";
+import { CameraVideo, ImageFill, Table } from "react-bootstrap-icons";
+import { $createImageNode, ImagePayload } from "../nodes/ImageNode";
+import {
+  $computeTableMap,
+  $computeTableMapSkipCellCheck,
+  $createTableCellNode,
+  $createTableNodeWithDimensions,
+  $getNodeTriplet,
+  $isTableCellNode,
+  $isTableNode,
+  $isTableRowNode,
+  applyTableHandlers,
+  INSERT_TABLE_COMMAND,
+  TableCellNode,
+  TableNode,
+  TableRowNode,
+} from "@lexical/table";
+import YouTubePlugin from "./YoutubePlugin";
+import ImagePlugin from "./ImagePlugin";
+import TablePlugin from "./TablePlugin";
+import ColorPlugin from "./ColorPlugin";
+import CodeBlockPlugin from "./CodeBlockPlugin";
+
+export type InsertImagePayload = Readonly<ImagePayload>;
+
+export const INSERT_IMAGE_COMMAND: LexicalCommand<InsertImagePayload> =
+  createCommand("INSERT_IMAGE_COMMAND");
+export const INSERT_VIDEO_COMMAND = createCommand("INSERT_VIDEO_COMMAND");
 
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
@@ -162,7 +198,7 @@ export default function ToolbarPlugin() {
           colorScheme: "blue",
           variant: "solid",
         }
-      : {};
+      : { color: "#444" };
 
   const updateHeading = (heading: HeadingTagType) => {
     editor.update(() => {
@@ -175,29 +211,8 @@ export default function ToolbarPlugin() {
   };
 
   return (
-    <Flex gap={4}>
-      <ButtonGroup
-        size="xs"
-        isAttached
-        variant="ghost"
-        color="#444"
-        className={css({
-          "& > button": { borderRadius: 0 },
-          alignItems: "center",
-        })}
-      >
-        <Select
-          size="xs"
-          mr={2}
-          placeholder="Select Heading"
-          onChange={(e) => {
-            updateHeading(e.target.value as HeadingTagType);
-          }}
-        >
-          {HEADINGS.map((heading) => (
-            <option value={heading}>{heading}</option>
-          ))}
-        </Select>
+    <Box>
+      <Flex alignItems="center" gap={1}>
         {RICH_TEXT_OPTIONS.map(({ id, label, icon, fontSize }) =>
           id === RichTextAction.Divider ? (
             <Divider />
@@ -208,11 +223,33 @@ export default function ToolbarPlugin() {
               fontSize={fontSize}
               onClick={() => onAction(id)}
               isDisabled={disableMap[id]}
+              size="sm"
+              variant="ghost"
               {...getSelectedBtnProps(selectionMap[id])}
             />
           )
         )}
-      </ButtonGroup>
-    </Flex>
+        <Select
+          size="xs"
+          mr={2}
+          placeholder="Select Heading"
+          onChange={(e) => {
+            updateHeading(e.target.value as HeadingTagType);
+          }}
+          width={"140px"}
+        >
+          {HEADINGS.map((heading) => (
+            <option value={heading}>{heading}</option>
+          ))}
+        </Select>
+      </Flex>
+      <Flex>
+        <ColorPlugin />
+        <TablePlugin />
+        <ImagePlugin />
+        <YouTubePlugin />
+        <CodeBlockPlugin />
+      </Flex>
+    </Box>
   );
 }

@@ -1,8 +1,10 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import React, { useMemo } from "react";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
-import { HeadingNode } from "@lexical/rich-text";
+import { HorizontalRuleNode } from "@lexical/react/LexicalHorizontalRuleNode";
+import { HeadingNode, QuoteNode } from "@lexical/rich-text";
 import { CodeHighlightNode, CodeNode } from "@lexical/code";
+import { TableNode, TableCellNode, TableRowNode } from "@lexical/table";
 
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
@@ -13,22 +15,11 @@ import { css } from "@emotion/css";
 import { ToolbarPlugin } from "./Plugins";
 import { EditorThemeClasses } from "lexical";
 import CustomOnChangePlugin from "./Plugins/CustomOnChangePlugin";
-
-const theme: EditorThemeClasses = {
-  text: {
-    bold: css({ fontWeight: "bold" }),
-    underline: css({ textDecoration: "underline" }),
-    strikethrough: css({ textDecoration: "line-through" }),
-    underlineStrikethrough: css({ textDecoration: "underline line-through" }),
-    italic: css({ fontStyle: "italic" }),
-    code: css({
-      color: "black",
-      padding: 2,
-      background: "#eee",
-      border: "1px solid #ccc",
-    }),
-  },
-};
+import { ImageNode } from "./nodes/ImageNode";
+import { YouTubeNode } from "./nodes/YoutubeNode";
+import { AutoLinkNode, LinkNode } from "@lexical/link";
+import { ListItemNode, ListNode } from "@lexical/list";
+import { theme } from "./theme";
 
 interface RichTextEditorProps {
   value: string;
@@ -44,7 +35,22 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
         namespace: name,
         theme,
         onError: () => {},
-        nodes: [HeadingNode, CodeHighlightNode, CodeNode],
+        nodes: [
+          HeadingNode,
+          CodeHighlightNode,
+          CodeNode,
+          ImageNode,
+          YouTubeNode,
+          TableNode,
+          TableCellNode,
+          TableRowNode,
+          AutoLinkNode,
+          LinkNode,
+          ListItemNode,
+          ListNode,
+          HorizontalRuleNode,
+          QuoteNode,
+        ],
       }),
       [name]
     );
@@ -53,12 +59,12 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
       <Box>
         <LexicalComposer initialConfig={initialConfig}>
           <ToolbarPlugin />
-          <Box pos="relative">
+          <Box pos="relative" height={350}>
             <RichTextPlugin
               contentEditable={
                 <ContentEditable
                   className={css({
-                    height: 120,
+                    height: `100%`,
                     fontSize: 12,
                     padding: 8,
                     overflow: "auto",
