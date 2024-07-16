@@ -16,20 +16,9 @@ import { mergeRegister } from "@lexical/utils";
 import ColorPicker from "../Components/ColorPicker";
 import { PaintBucket, Type } from "react-bootstrap-icons";
 
-type ColorPayload = {
-  property: "background" | "color";
-  value: string;
-};
-export const CHANGE_COLOR_COMMAND: LexicalCommand<ColorPayload> = createCommand(
-  "CHANGE_COLOR_COMMAND"
-);
-
 export default function ColorPlugin(): JSX.Element | null {
   const [editor] = useLexicalComposerContext();
-  const [{ color, bgColor }, setColors] = useState<{
-    color: string;
-    bgColor: string;
-  }>({
+  const [{ color, bgColor }, setColors] = useState({
     color: "#000",
     bgColor: "#fff",
   });
@@ -66,20 +55,24 @@ export default function ColorPlugin(): JSX.Element | null {
           return false;
         },
         LOW_PRIORIRTY
-      ),
-      editor.registerCommand<ColorPayload>(
-        CHANGE_COLOR_COMMAND,
-        ({ property, value }) => {
-          const selection = $getSelection();
-          if (selection !== null) {
-            $patchStyleText(selection, { [property]: value });
-          }
-          return true;
-        },
-        LOW_PRIORIRTY
       )
     );
   }, [editor]);
+
+  const updateColor = ({
+    property,
+    color,
+  }: {
+    property: "background" | "color";
+    color: string;
+  }) => {
+    editor.update(() => {
+      const selection = $getSelection();
+      if (selection !== null) {
+        $patchStyleText(selection, { [property]: color });
+      }
+    });
+  };
 
   return (
     <>
@@ -87,9 +80,9 @@ export default function ColorPlugin(): JSX.Element | null {
         color={color}
         icon={<Type />}
         onChange={(color) => {
-          editor.dispatchCommand(CHANGE_COLOR_COMMAND, {
+          updateColor({
             property: "color",
-            value: color,
+            color,
           });
         }}
       />
@@ -97,9 +90,9 @@ export default function ColorPlugin(): JSX.Element | null {
         color={bgColor}
         icon={<PaintBucket />}
         onChange={(color) => {
-          editor.dispatchCommand(CHANGE_COLOR_COMMAND, {
+          updateColor({
             property: "background",
-            value: color,
+            color,
           });
         }}
       />

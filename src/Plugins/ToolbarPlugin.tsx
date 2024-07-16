@@ -80,20 +80,20 @@ export default function ToolbarPlugin() {
           : anchorNode.getTopLevelElementOrThrow();
       const elementKey = element.getKey();
       const elementDOM = editor.getElementByKey(elementKey);
-      if (elementDOM !== null) {
-        setSelectedElementKey(elementKey);
-        if ($isListNode(element)) {
-          const parentList = $getNearestNodeOfType(anchorNode, ListNode);
-          const type = parentList ? parentList.getTag() : element.getTag();
-          setBlockType(type);
-        } else {
-          const type = $isHeadingNode(element)
-            ? element.getTag()
-            : element.getType();
-          setBlockType(type);
-          if ($isCodeNode(element)) {
-            setCodeLanguage(element.getLanguage() || getDefaultCodeLanguage());
-          }
+      if (!elementDOM) return;
+
+      setSelectedElementKey(elementKey);
+      if ($isListNode(element)) {
+        const parentList = $getNearestNodeOfType(anchorNode, ListNode);
+        const type = parentList ? parentList.getTag() : element.getTag();
+        setBlockType(type);
+      } else {
+        const type = $isHeadingNode(element)
+          ? element.getTag()
+          : element.getType();
+        setBlockType(type);
+        if ($isCodeNode(element)) {
+          setCodeLanguage(element.getLanguage() || getDefaultCodeLanguage());
         }
       }
     }

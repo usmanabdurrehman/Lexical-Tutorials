@@ -2,20 +2,10 @@ import type {
   DOMConversionMap,
   DOMConversionOutput,
   DOMExportOutput,
-  EditorConfig,
   NodeKey,
 } from "lexical";
 
 import { DecoratorNode } from "lexical";
-
-export interface ImagePayload {
-  altText: string;
-  height?: number;
-  key?: NodeKey;
-  maxWidth?: number;
-  src: string;
-  width?: number;
-}
 
 function convertImageElement(domNode: Node): null | DOMConversionOutput {
   if (domNode instanceof HTMLImageElement) {
@@ -26,52 +16,12 @@ function convertImageElement(domNode: Node): null | DOMConversionOutput {
   return null;
 }
 
-export type SerializedImageNode = {
-  altText: string;
-  height?: number;
-  maxWidth: number;
-  src: string;
-  width?: number;
-  type: "image";
-  version: 1;
-};
-
 export class ImageNode extends DecoratorNode<JSX.Element> {
   __src: string;
   __altText: string;
   __width: "inherit" | number;
   __height: "inherit" | number;
   __maxWidth: number;
-
-  static getType(): string {
-    return "image";
-  }
-
-  static clone(node: ImageNode): ImageNode {
-    return new ImageNode({
-      src: node.__src,
-      altText: node.__altText,
-      maxWidth: node.__maxWidth,
-      width: node.__width,
-      height: node.__height,
-    });
-  }
-
-  exportDOM(): DOMExportOutput {
-    const element = document.createElement("img");
-    element.setAttribute("src", this.__src);
-    element.setAttribute("alt", this.__altText);
-    return { element };
-  }
-
-  static importDOM(): DOMConversionMap | null {
-    return {
-      img: (node: Node) => ({
-        conversion: convertImageElement,
-        priority: 0,
-      }),
-    };
-  }
 
   constructor({
     src,
@@ -96,14 +46,18 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
     this.__height = height || "inherit";
   }
 
-  createDOM(config: EditorConfig): HTMLElement {
-    const span = document.createElement("span");
-    const theme = config.theme;
-    const className = theme.image;
-    if (className !== undefined) {
-      span.className = className;
-    }
-    return span;
+  static getType(): string {
+    return "image";
+  }
+
+  static clone(node: ImageNode): ImageNode {
+    return new ImageNode({
+      src: node.__src,
+      altText: node.__altText,
+      maxWidth: node.__maxWidth,
+      width: node.__width,
+      height: node.__height,
+    });
   }
 
   decorate(): JSX.Element {
@@ -119,6 +73,27 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
       />
     );
   }
+
+  createDOM(): HTMLElement {
+    const span = document.createElement("span");
+    return span;
+  }
+
+  exportDOM(): DOMExportOutput {
+    const element = document.createElement("img");
+    element.setAttribute("src", this.__src);
+    element.setAttribute("alt", this.__altText);
+    return { element };
+  }
+
+  static importDOM(): DOMConversionMap | null {
+    return {
+      img: (node: Node) => ({
+        conversion: convertImageElement,
+        priority: 0,
+      }),
+    };
+  }
 }
 
 export function $createImageNode({
@@ -127,6 +102,12 @@ export function $createImageNode({
   maxWidth = 400,
   src,
   width,
-}: ImagePayload): ImageNode {
+}: {
+  altText: string;
+  height?: number;
+  maxWidth?: number;
+  src: string;
+  width?: number;
+}): ImageNode {
   return new ImageNode({ src, altText, maxWidth, width, height });
 }

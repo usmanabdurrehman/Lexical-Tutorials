@@ -1,8 +1,7 @@
 import { Box, Flex } from "@chakra-ui/react";
 import React, { useMemo } from "react";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
-import { HorizontalRuleNode } from "@lexical/react/LexicalHorizontalRuleNode";
-import { HeadingNode, QuoteNode } from "@lexical/rich-text";
+import { HeadingNode } from "@lexical/rich-text";
 import { CodeHighlightNode, CodeNode } from "@lexical/code";
 import { TableNode, TableCellNode, TableRowNode } from "@lexical/table";
 
@@ -13,14 +12,11 @@ import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { css } from "@emotion/css";
 import { ToolbarPlugin } from "./Plugins";
-import { EditorThemeClasses } from "lexical";
 import CustomOnChangePlugin from "./Plugins/CustomOnChangePlugin";
 import { ImageNode } from "./nodes/ImageNode";
 import { YouTubeNode } from "./nodes/YoutubeNode";
-import { AutoLinkNode, LinkNode } from "@lexical/link";
 import { ListItemNode, ListNode } from "@lexical/list";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
-import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
 import { theme } from "./theme";
 
 interface RichTextEditorProps {
@@ -39,19 +35,15 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
         onError: () => {},
         nodes: [
           HeadingNode,
+          ListItemNode,
+          ListNode,
+          TableNode,
+          TableCellNode,
+          TableRowNode,
           CodeHighlightNode,
           CodeNode,
           ImageNode,
           YouTubeNode,
-          TableNode,
-          TableCellNode,
-          TableRowNode,
-          AutoLinkNode,
-          LinkNode,
-          ListItemNode,
-          ListNode,
-          HorizontalRuleNode,
-          QuoteNode,
         ],
       }),
       [name]
@@ -95,7 +87,6 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
           <AutoFocusPlugin />
           <HistoryPlugin />
           <ListPlugin />
-          <LinkPlugin />
           <CustomOnChangePlugin value={value} onChange={onChange} />
         </LexicalComposer>
       </Box>

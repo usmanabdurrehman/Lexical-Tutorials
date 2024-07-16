@@ -1,71 +1,47 @@
-.editor-code {
-  background-color: rgb(240, 242, 245);
-  font-family: Menlo, Consolas, Monaco, monospace;
-  display: block;
-  padding: 8px 8px 8px 52px;
-  line-height: 1.53;
-  font-size: 13px;
-  margin: 0;
-  margin-top: 8px;
-  margin-bottom: 8px;
-  tab-size: 2;
-  /* white-space: pre; */
-  overflow-x: auto;
-  position: relative;
+.bold {
+  font-weight: bold;
 }
 
-.editor-code:before {
-  content: attr(data-gutter);
-  position: absolute;
-  background-color: #eee;
-  left: 0;
-  top: 0;
-  border-right: 1px solid #ccc;
-  padding: 8px;
-  color: #777;
-  white-space: pre-wrap;
-  text-align: right;
-  min-width: 25px;
-}
-.editor-code:after {
-  content: attr(data-highlight-language);
-  top: 0;
-  right: 3px;
-  padding: 3px;
-  font-size: 10px;
-  text-transform: uppercase;
-  position: absolute;
-  color: rgba(0, 0, 0, 0.5);
+.underline {
+  text-decoration: underline;
 }
 
-.editor-tokenComment {
-  color: slategray;
+.strikethrough {
+  text-decoration: line-through;
 }
 
-.editor-tokenPunctuation {
-  color: #999;
+.underlineStrikethrough {
+  text-decoration: underline line-through;
 }
 
-.editor-tokenProperty {
-  color: #905;
+.italic {
+  font-style: italic;
 }
 
-.editor-tokenSelector {
-  color: #690;
+.code {
+  color: black;
+  padding: 2px;
+  background: #eee;
+  border: 1px solid #ccc;
 }
 
-.editor-tokenOperator {
-  color: #9a6e3a;
+.image {
+  margin-top: 4px;
 }
 
-.editor-tokenAttr {
-  color: #07a;
+.table {
+  margin-top: 4px;
 }
 
-.editor-tokenVariable {
-  color: #e90;
+.tableCell {
+  width: 70px;
+  border: 1px solid #bbb;
+  padding-left: 6px;
 }
 
-.editor-tokenFunction {
-  color: #dd4a68;
+.tableCell p {
+  margin-bottom: 4px;
+}
+.tableCellHeader {
+  background: #f2f3f5;
 }

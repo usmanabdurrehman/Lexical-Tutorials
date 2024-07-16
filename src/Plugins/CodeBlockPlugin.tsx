@@ -38,21 +38,6 @@ export default function CodeBlockPlugin({
 
   useEffect(() => {
     registerCodeHighlighting(editor);
-
-    return mergeRegister(
-      editor.registerCommand(
-        ADD_CODE_COMMAND,
-        () => {
-          const selection = $getSelection();
-
-          if ($isRangeSelection(selection)) {
-            $wrapNodes(selection, () => $createCodeNode());
-          }
-          return true;
-        },
-        LOW_PRIORIRTY
-      )
-    );
   }, [editor]);
 
   return (
@@ -62,7 +47,15 @@ export default function CodeBlockPlugin({
         icon={<CodeSquare />}
         size="sm"
         variant="ghost"
-        onClick={() => editor.dispatchCommand(ADD_CODE_COMMAND, undefined)}
+        onClick={() => {
+          editor.update(() => {
+            const selection = $getSelection();
+
+            if ($isRangeSelection(selection)) {
+              $wrapNodes(selection, () => $createCodeNode());
+            }
+          });
+        }}
         {...getSelectedBtnProps(blockType === "code")}
       />
       {blockType === "code" && (

@@ -1,65 +1,31 @@
-import type {
+import {
+  DecoratorNode,
   DOMConversionMap,
   DOMConversionOutput,
   DOMExportOutput,
-  EditorConfig,
-  ElementFormatType,
   LexicalEditor,
   NodeKey,
-  Spread,
 } from "lexical";
 
-import { BlockWithAlignableContents } from "@lexical/react/LexicalBlockWithAlignableContents";
-import {
-  DecoratorBlockNode,
-  SerializedDecoratorBlockNode,
-} from "@lexical/react/LexicalDecoratorBlockNode";
-
-type YouTubeComponentProps = Readonly<{
-  className: Readonly<{
-    base: string;
-    focus: string;
-  }>;
-  format: ElementFormatType | null;
-  nodeKey: NodeKey;
+interface YouTubeComponentProps {
   videoID: string;
-}>;
+}
 
 const HEIGHT = "315px";
 const WIDTH = "560px";
+const ID_ATTR = "data-lexical-youtube";
 
-function YouTubeComponent({
-  className,
-  format,
-  nodeKey,
-  videoID,
-}: YouTubeComponentProps) {
-  return (
-    <BlockWithAlignableContents
-      className={className}
-      format={format}
-      nodeKey={nodeKey}
-    >
-      <iframe
-        width={WIDTH}
-        height={HEIGHT}
-        src={`https://www.youtube-nocookie.com/embed/${videoID}`}
-      />
-    </BlockWithAlignableContents>
-  );
+const getYoutubeLink = (videoID: string) =>
+  `https://www.youtube-nocookie.com/embed/${videoID}`;
+
+function YouTubeComponent({ videoID }: YouTubeComponentProps) {
+  return <iframe width={WIDTH} height={HEIGHT} src={getYoutubeLink(videoID)} />;
 }
-
-export type SerializedYouTubeNode = Spread<
-  {
-    videoID: string;
-  },
-  SerializedDecoratorBlockNode
->;
 
 function $convertYoutubeElement(
   domNode: HTMLElement
 ): null | DOMConversionOutput {
-  const videoID = domNode.getAttribute("data-lexical-youtube");
+  const videoID = domNode.getAttribute(ID_ATTR);
   if (videoID) {
     const node = $createYouTubeNode(videoID);
     return { node };
@@ -67,38 +33,44 @@ function $convertYoutubeElement(
   return null;
 }
 
-export class YouTubeNode extends DecoratorBlockNode {
+export class YouTubeNode extends DecoratorNode<JSX.Element> {
   __id: string;
+
+  constructor(id: string, key?: NodeKey) {
+    super(key);
+    this.__id = id;
+  }
 
   static getType(): string {
     return "youtube";
   }
 
   static clone(node: YouTubeNode): YouTubeNode {
-    return new YouTubeNode(node.__id, node.__format, node.__key);
+    return new YouTubeNode(node.__id, node.__key);
   }
 
-  constructor(id: string, format?: ElementFormatType, key?: NodeKey) {
-    super(format, key);
-    this.__id = id;
+  decorate(_editor: LexicalEditor): JSX.Element {
+    return <YouTubeComponent videoID={this.__id} />;
+  }
+
+  createDOM(): HTMLElement {
+    const div = document.createElement("div");
+    return div;
   }
 
   exportDOM(): DOMExportOutput {
     const element = document.createElement("iframe");
-    element.setAttribute("data-lexical-youtube", this.__id);
+    element.setAttribute(ID_ATTR, this.__id);
     element.setAttribute("width", WIDTH);
     element.setAttribute("height", HEIGHT);
-    element.setAttribute(
-      "src",
-      `https://www.youtube-nocookie.com/embed/${this.__id}`
-    );
+    element.setAttribute("src", getYoutubeLink(this.__id));
     return { element };
   }
 
   static importDOM(): DOMConversionMap | null {
     return {
       iframe: (domNode: HTMLElement) => {
-        if (!domNode.hasAttribute("data-lexical-youtube")) {
+        if (!domNode.hasAttribute(ID_ATTR)) {
           return null;
         }
         return {
@@ -107,31 +79,6 @@ export class YouTubeNode extends DecoratorBlockNode {
         };
       },
     };
-  }
-
-  updateDOM(): false {
-    return false;
-  }
-
-  getId(): string {
-    return this.__id;
-  }
-
-  decorate(_editor: LexicalEditor, config: EditorConfig): JSX.Element {
-    const embedBlockTheme = config.theme.embedBlock || {};
-    const className = {
-      base: embedBlockTheme.base || "",
-      focus: embedBlockTheme.focus || "",
-    };
-
-    return (
-      <YouTubeComponent
-        className={className}
-        format={this.__format}
-        nodeKey={this.getKey()}
-        videoID={this.__id}
-      />
-    );
   }
 }
 

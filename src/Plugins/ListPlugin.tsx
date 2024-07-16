@@ -25,10 +25,10 @@ export default function ListPlugin({
         size="sm"
         variant="ghost"
         onClick={() => {
-          if (blockType !== "ol") {
-            editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined);
-          } else {
+          if (blockType === "ol") {
             editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
+          } else {
+            editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined);
           }
         }}
         {...getSelectedBtnProps(blockType === "ol")}
@@ -39,10 +39,10 @@ export default function ListPlugin({
         size="sm"
         variant="ghost"
         onClick={() => {
-          if (blockType !== "ul") {
-            editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
-          } else {
+          if (blockType === "ul") {
             editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
+          } else {
+            editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
           }
         }}
         {...getSelectedBtnProps(blockType === "ul")}

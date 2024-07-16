@@ -73,7 +73,10 @@ export default function ImagePlugin(): JSX.Element | null {
         ref={imageRef}
         onChange={(e) => {
           const file = e.target.files?.[0];
-          if (file) setFile(file);
+          if (file) {
+            setFile(file);
+          }
+          if (imageRef.current) imageRef.current.files = null;
         }}
       />
       <Modal

@@ -16,7 +16,7 @@ export default function ColorPicker({
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   useOutsideClick({
-    ref: ref,
+    ref,
     handler: () => setIsOpen(false),
   });
 

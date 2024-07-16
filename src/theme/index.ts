@@ -1,61 +1,51 @@
 import { css } from "@emotion/css";
 import { EditorThemeClasses } from "lexical";
 import "./index.css";
+import "./editor.css";
 
 export const theme: EditorThemeClasses = {
   text: {
-    bold: css({ fontWeight: "bold" }),
-    underline: css({ textDecoration: "underline" }),
-    strikethrough: css({ textDecoration: "line-through" }),
-    underlineStrikethrough: css({ textDecoration: "underline line-through" }),
-    italic: css({ fontStyle: "italic" }),
-    code: css({
-      color: "black",
-      padding: 2,
-      background: "#eee",
-      border: "1px solid #ccc",
-    }),
+    bold: "bold",
+    underline: "underline",
+    strikethrough: "strikethrough",
+    underlineStrikethrough: "underlineStrikethrough",
+    italic: "italic",
+    code: "code",
   },
-  image: css({ marginTop: 4 }),
-  table: css({ borderCollapse: "collapse" }),
-  tableCell: css({
-    width: 70,
-    border: "1px solid #bbb",
-    p: { marginBottom: 4 },
-  }),
-  tableCellHeader: css({ background: "#f2f3f5" }),
-  code: "editor-code",
+  image: "image",
+  table: "table",
+  tableCell: "tableCell",
+  tableCellHeader: "tableCellHeader",
+  code: "editorCode",
   codeHighlight: {
-    atrule: "editor-tokenAttr",
-    attr: "editor-tokenAttr",
-    boolean: "editor-tokenProperty",
-    builtin: "editor-tokenSelector",
-    cdata: "editor-tokenComment",
-    char: "editor-tokenSelector",
-    class: "editor-tokenFunction",
-    "class-name": "editor-tokenFunction",
-    comment: "editor-tokenComment",
-    constant: "editor-tokenProperty",
-    deleted: "editor-tokenProperty",
-    doctype: "editor-tokenComment",
-    entity: "editor-tokenOperator",
-    function: "editor-tokenFunction",
-    important: "editor-tokenVariable",
-    inserted: "editor-tokenSelector",
-    keyword: "editor-tokenAttr",
-    namespace: "editor-tokenVariable",
-    number: "editor-tokenProperty",
-    operator: "editor-tokenOperator",
-    prolog: "editor-tokenComment",
-    property: "editor-tokenProperty",
-    punctuation: "editor-tokenPunctuation",
-    regex: "editor-tokenVariable",
-    selector: "editor-tokenSelector",
-    string: "editor-tokenSelector",
-    symbol: "editor-tokenProperty",
-    tag: "editor-tokenProperty",
-    url: "editor-tokenOperator",
-    variable: "editor-tokenVariable",
+    atrule: "editorTokenAttr",
+    attr: "editorTokenAttr",
+    boolean: "editorTokenProperty",
+    builtin: "editorTokenSelector",
+    cdata: "editorTokenComment",
+    char: "editorTokenSelector",
+    class: "editorTokenFunction", // class constructor
+    comment: "editorTokenComment", // comment
+    constant: "editorTokenProperty",
+    deleted: "editorTokenProperty",
+    doctype: "editorTokenComment",
+    entity: "editorTokenOperator",
+    function: "editorTokenFunction", // es5 function
+    important: "editorTokenVariable",
+    inserted: "editorTokenSelector",
+    keyword: "editorTokenAttr", // variable keyword like const/let
+    namespace: "editorTokenVariable",
+    number: "editorTokenProperty", // number values
+    operator: "editorTokenOperator", // operator like +/*-
+    prolog: "editorTokenComment",
+    property: "editorTokenProperty",
+    punctuation: "editorTokenPunctuation", // brackets of array, object
+    regex: "editorTokenVariable",
+    selector: "editorTokenSelector",
+    string: "editorTokenSelector", // string values
+    symbol: "editorTokenProperty",
+    tag: "editorTokenProperty",
+    url: "editorTokenOperator",
+    variable: "editorTokenVariable",
   },
-  link: css({ color: "#216fdb", "&:hover": { textDecoration: "underline" } }),
 };
