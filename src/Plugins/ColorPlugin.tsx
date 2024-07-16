@@ -1,4 +1,3 @@
-import { Box, IconButton } from "@chakra-ui/react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import {
   $getSelection,
@@ -13,7 +12,6 @@ import {
   $patchStyleText,
   $getSelectionStyleValueForProperty,
 } from "@lexical/selection";
-import { SketchPicker } from "react-color";
 import { mergeRegister } from "@lexical/utils";
 import ColorPicker from "../Components/ColorPicker";
 import { PaintBucket, Type } from "react-bootstrap-icons";
@@ -82,8 +80,6 @@ export default function ColorPlugin(): JSX.Element | null {
       )
     );
   }, [editor]);
-
-  console.log({ color, bgColor });
 
   return (
     <>

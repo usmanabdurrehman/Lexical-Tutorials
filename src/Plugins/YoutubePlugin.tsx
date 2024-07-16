@@ -41,7 +41,7 @@ export default function YouTubePlugin(): JSX.Element | null {
     const match =
       /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/.exec(url);
 
-    const id = match ? (match?.[2].length === 11 ? match[2] : null) : null;
+    const id = match && match?.[2]?.length === 11 ? match[2] : null;
     if (!id) return;
     editor.dispatchCommand(INSERT_YOUTUBE_COMMAND, id);
     setIsOpen(false);

@@ -1,7 +1,6 @@
 import {
   Button,
   IconButton,
-  Input,
   NumberInput,
   NumberInputField,
 } from "@chakra-ui/react";
@@ -9,7 +8,7 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { $insertNodeToNearestRoot } from "@lexical/utils";
 import { createCommand, LexicalCommand } from "lexical";
 import { useEffect, useState } from "react";
-import { Table, Youtube } from "react-bootstrap-icons";
+import { Table } from "react-bootstrap-icons";
 import { LOW_PRIORIRTY } from "../constants";
 import { TableNode, $createTableNodeWithDimensions } from "@lexical/table";
 

@@ -19,6 +19,8 @@ import { ImageNode } from "./nodes/ImageNode";
 import { YouTubeNode } from "./nodes/YoutubeNode";
 import { AutoLinkNode, LinkNode } from "@lexical/link";
 import { ListItemNode, ListNode } from "@lexical/list";
+import { ListPlugin } from "@lexical/react/LexicalListPlugin";
+import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
 import { theme } from "./theme";
 
 interface RichTextEditorProps {
@@ -92,6 +94,8 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
           </Box>
           <AutoFocusPlugin />
           <HistoryPlugin />
+          <ListPlugin />
+          <LinkPlugin />
           <CustomOnChangePlugin value={value} onChange={onChange} />
         </LexicalComposer>
       </Box>

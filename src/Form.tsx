@@ -19,7 +19,7 @@ export default function Form() {
   return (
     <Box p={2}>
       <RichTextEditor
-        placeholder="Select Post"
+        placeholder="Write Post"
         name="post"
         value={value}
         onChange={(newValue) => setValue(newValue)}

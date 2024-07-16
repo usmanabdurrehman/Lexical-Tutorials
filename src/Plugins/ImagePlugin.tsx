@@ -1,14 +1,11 @@
 import { Button, IconButton, Input } from "@chakra-ui/react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { $insertNodeToNearestRoot } from "@lexical/utils";
 import { $insertNodes, createCommand, LexicalCommand } from "lexical";
 import { useEffect, useRef, useState } from "react";
-import { ImageFill, Youtube } from "react-bootstrap-icons";
+import { ImageFill } from "react-bootstrap-icons";
 import { LOW_PRIORIRTY } from "../constants";
 
-import { $createYouTubeNode, YouTubeNode } from "../nodes/YoutubeNode";
 import Modal from "../Components/Modal";
-import { INSERT_YOUTUBE_COMMAND } from "./YoutubePlugin";
 import { InsertImagePayload } from "./ToolbarPlugin";
 import { $createImageNode, ImageNode } from "../nodes/ImageNode";
 

@@ -57,4 +57,5 @@ export const theme: EditorThemeClasses = {
     url: "editor-tokenOperator",
     variable: "editor-tokenVariable",
   },
+  link: css({ color: "#216fdb", "&:hover": { textDecoration: "underline" } }),
 };
