@@ -1,37 +1,14 @@
 import { Button, IconButton, Input } from "@chakra-ui/react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $insertNodeToNearestRoot } from "@lexical/utils";
-import { createCommand, LexicalCommand } from "lexical";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Youtube } from "react-bootstrap-icons";
-import { LOW_PRIORIRTY } from "../constants";
 
-import { $createYouTubeNode, YouTubeNode } from "../nodes/YoutubeNode";
+import { $createYouTubeNode } from "../nodes/YoutubeNode";
 import Modal from "../Components/Modal";
-
-export const INSERT_YOUTUBE_COMMAND: LexicalCommand<string> = createCommand(
-  "INSERT_YOUTUBE_COMMAND"
-);
 
 export default function YouTubePlugin(): JSX.Element | null {
   const [editor] = useLexicalComposerContext();
-
-  useEffect(() => {
-    if (!editor.hasNodes([YouTubeNode])) {
-      throw new Error("YouTubePlugin: YouTubeNode not registered on editor");
-    }
-
-    return editor.registerCommand<string>(
-      INSERT_YOUTUBE_COMMAND,
-      (payload) => {
-        const youTubeNode = $createYouTubeNode(payload);
-        $insertNodeToNearestRoot(youTubeNode);
-
-        return true;
-      },
-      LOW_PRIORIRTY
-    );
-  }, [editor]);
 
   const [isOpen, setIsOpen] = useState(false);
   const [url, setUrl] = useState<string>();
@@ -43,7 +20,11 @@ export default function YouTubePlugin(): JSX.Element | null {
 
     const id = match && match?.[2]?.length === 11 ? match[2] : null;
     if (!id) return;
-    editor.dispatchCommand(INSERT_YOUTUBE_COMMAND, id);
+    editor.update(() => {
+      const youTubeNode = $createYouTubeNode(id);
+      $insertNodeToNearestRoot(youTubeNode);
+    });
+
     setIsOpen(false);
     setUrl(undefined);
   };

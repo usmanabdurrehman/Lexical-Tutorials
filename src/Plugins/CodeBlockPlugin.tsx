@@ -7,21 +7,12 @@ import {
 } from "@lexical/code";
 import { Flex, IconButton, Select } from "@chakra-ui/react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import {
-  $getNodeByKey,
-  $getSelection,
-  $isRangeSelection,
-  createCommand,
-} from "lexical";
-import { LOW_PRIORIRTY } from "../constants";
-import { mergeRegister } from "@lexical/utils";
+import { $getNodeByKey, $getSelection, $isRangeSelection } from "lexical";
 import { CodeSquare } from "react-bootstrap-icons";
 import { $wrapNodes } from "@lexical/selection";
 import { getSelectedBtnProps } from "../utils";
 
 const codeLanguages = getCodeLanguages();
-
-export const ADD_CODE_COMMAND = createCommand("ADD_CODE_COMMAND");
 
 interface CodeBlockPluginProps {
   selectedElementKey: string;

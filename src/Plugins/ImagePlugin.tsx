@@ -1,36 +1,14 @@
 import { Button, IconButton, Input } from "@chakra-ui/react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { $insertNodes, createCommand, LexicalCommand } from "lexical";
-import { useEffect, useRef, useState } from "react";
+import { $insertNodes } from "lexical";
+import { useRef, useState } from "react";
 import { ImageFill } from "react-bootstrap-icons";
-import { LOW_PRIORIRTY } from "../constants";
 
 import Modal from "../Components/Modal";
-import { InsertImagePayload } from "./ToolbarPlugin";
-import { $createImageNode, ImageNode } from "../nodes/ImageNode";
-
-export const INSERT_IMAGE_COMMAND: LexicalCommand<InsertImagePayload> =
-  createCommand("INSERT_IMAGE_COMMAND");
+import { $createImageNode } from "../nodes/ImageNode";
 
 export default function ImagePlugin(): JSX.Element | null {
   const [editor] = useLexicalComposerContext();
-
-  useEffect(() => {
-    if (!editor.hasNodes([ImageNode])) {
-      throw new Error("ImagePlugin: ImageNode not registered on editor");
-    }
-
-    return editor.registerCommand<InsertImagePayload>(
-      INSERT_IMAGE_COMMAND,
-      (payload) => {
-        const imageNode = $createImageNode(payload);
-        $insertNodes([imageNode]);
-
-        return false;
-      },
-      LOW_PRIORIRTY
-    );
-  }, [editor]);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -45,8 +23,11 @@ export default function ImagePlugin(): JSX.Element | null {
       src,
       altText: "Sum image",
     };
+    editor.update(() => {
+      const imageNode = $createImageNode(payload);
+      $insertNodes([imageNode]);
+    });
 
-    editor.dispatchCommand(INSERT_IMAGE_COMMAND, payload);
     setIsOpen(false);
     setUrl(undefined);
     setFile(undefined);

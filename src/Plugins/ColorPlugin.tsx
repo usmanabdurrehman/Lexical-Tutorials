@@ -2,8 +2,6 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import {
   $getSelection,
   $isRangeSelection,
-  createCommand,
-  LexicalCommand,
   SELECTION_CHANGE_COMMAND,
 } from "lexical";
 import { useEffect, useState } from "react";
@@ -68,7 +66,7 @@ export default function ColorPlugin(): JSX.Element | null {
   }) => {
     editor.update(() => {
       const selection = $getSelection();
-      if (selection !== null) {
+      if (selection) {
         $patchStyleText(selection, { [property]: color });
       }
     });

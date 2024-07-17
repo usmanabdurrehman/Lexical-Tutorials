@@ -12,10 +12,8 @@ import {
   $isRangeSelection,
   CAN_REDO_COMMAND,
   CAN_UNDO_COMMAND,
-  createCommand,
   FORMAT_ELEMENT_COMMAND,
   FORMAT_TEXT_COMMAND,
-  LexicalCommand,
   REDO_COMMAND,
   SELECTION_CHANGE_COMMAND,
   UNDO_COMMAND,
@@ -25,7 +23,6 @@ import { $getNearestNodeOfType, mergeRegister } from "@lexical/utils";
 import { HeadingTagType, $createHeadingNode } from "@lexical/rich-text";
 import { $wrapNodes } from "@lexical/selection";
 import { useKeyBindings } from "../hooks/useKeyBindings";
-import { ImagePayload } from "../nodes/ImageNode";
 import YouTubePlugin from "./YoutubePlugin";
 import ImagePlugin from "./ImagePlugin";
 import TablePlugin from "./TablePlugin";
@@ -36,12 +33,6 @@ import { $isListNode, ListNode } from "@lexical/list";
 import { $isHeadingNode } from "@lexical/rich-text";
 import { $isCodeNode, getDefaultCodeLanguage } from "@lexical/code";
 import { getSelectedBtnProps } from "../utils";
-
-export type InsertImagePayload = Readonly<ImagePayload>;
-
-export const INSERT_IMAGE_COMMAND: LexicalCommand<InsertImagePayload> =
-  createCommand("INSERT_IMAGE_COMMAND");
-export const INSERT_VIDEO_COMMAND = createCommand("INSERT_VIDEO_COMMAND");
 
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();

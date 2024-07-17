@@ -12,7 +12,6 @@ export const theme: EditorThemeClasses = {
     italic: "italic",
     code: "code",
   },
-  image: "image",
   table: "table",
   tableCell: "tableCell",
   tableCellHeader: "tableCellHeader",

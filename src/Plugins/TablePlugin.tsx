@@ -46,7 +46,11 @@ export default function TablePlugin(): JSX.Element | null {
         onClose={() => setIsOpen(false)}
         isOpen={isOpen}
         footer={
-          <Button variant="ghost" onClick={onAdd}>
+          <Button
+            variant="ghost"
+            onClick={onAdd}
+            isDisabled={!rows || !columns}
+          >
             Add
           </Button>
         }
@@ -56,6 +60,7 @@ export default function TablePlugin(): JSX.Element | null {
             value={rows}
             onChange={(e) => setRows(Number(e.target.value))}
             placeholder="Rows"
+            autoFocus
           />
         </NumberInput>
 
