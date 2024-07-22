@@ -1,0 +1,70 @@
+.editorCode {
+  background-color: rgb(240, 242, 245);
+  font-family: Menlo, Consolas, Monaco, monospace;
+  display: block;
+  padding: 8px 8px 8px 52px;
+  line-height: 1.53;
+  font-size: 13px;
+  margin: 0;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  tab-size: 2;
+  overflow-x: auto;
+  position: relative;
+}
+
+.editorCode:before {
+  content: attr(data-gutter);
+  position: absolute;
+  background-color: #eee;
+  left: 0;
+  top: 0;
+  border-right: 1px solid #ccc;
+  padding: 8px;
+  color: #777;
+  white-space: pre-wrap;
+  text-align: right;
+  min-width: 25px;
+}
+.editorCode:after {
+  content: attr(data-highlight-language);
+  position: absolute;
+  top: 0;
+  right: 3px;
+  padding: 3px;
+  font-size: 10px;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.editorTokenComment {
+  color: slategray;
+}
+
+.editor-tokenPunctuation {
+  color: #999;
+}
+
+.editorTokenProperty {
+  color: #905;
+}
+
+.editorTokenSelector {
+  color: #690;
+}
+
+.editorTokenOperator {
+  color: #9a6e3a;
+}
+
+.editorTokenAttr {
+  color: #07a;
+}
+
+.editorTokenVariable {
+  color: #e90;
+}
+
+.editorTokenFunction {
+  color: #dd4a68;
+}

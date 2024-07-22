@@ -8,10 +8,16 @@ import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
+import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { css } from "@emotion/css";
 import { ToolbarPlugin } from "./Plugins";
 import CustomOnChangePlugin from "./Plugins/CustomOnChangePlugin";
 import { theme } from "./theme";
+import { ListNode, ListItemNode } from "@lexical/list";
+import { TableNode, TableCellNode, TableRowNode } from "@lexical/table";
+import { CodeNode, CodeHighlightNode } from "@lexical/code";
+import { ImageNode } from "./nodes/ImageNode";
+import { YoutubeNode } from "./nodes/YoutubeNode";
 
 interface RichTextEditorProps {
   value: string;
@@ -27,7 +33,18 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
         namespace: name,
         theme,
         onError: () => {},
-        nodes: [HeadingNode],
+        nodes: [
+          HeadingNode,
+          ListNode,
+          ListItemNode,
+          TableNode,
+          TableCellNode,
+          TableRowNode,
+          CodeNode,
+          CodeHighlightNode,
+          ImageNode,
+          YoutubeNode,
+        ],
       }),
       [name]
     );
@@ -69,6 +86,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
           </Box>
           <AutoFocusPlugin />
           <HistoryPlugin />
+          <ListPlugin />
           <CustomOnChangePlugin value={value} onChange={onChange} />
         </LexicalComposer>
       </Box>

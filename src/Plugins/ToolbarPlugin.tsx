@@ -19,12 +19,24 @@ import {
   UNDO_COMMAND,
 } from "lexical";
 import { useEffect, useState } from "react";
-import { mergeRegister } from "@lexical/utils";
-import { HeadingTagType, $createHeadingNode } from "@lexical/rich-text";
+import { mergeRegister, $getNearestNodeOfType } from "@lexical/utils";
+import {
+  HeadingTagType,
+  $createHeadingNode,
+  $isHeadingNode,
+} from "@lexical/rich-text";
 import { $wrapNodes } from "@lexical/selection";
 import { useKeyBindings } from "../hooks/useKeyBindings";
 
 import { getSelectedBtnProps } from "../utils";
+import ColorPlugin from "./ColorPlugin";
+import ListPlugin from "./ListPlugin";
+import { $isListNode, ListNode } from "@lexical/list";
+import TablePlugin from "./TablePlugin";
+import CodeBlockPlugin from "./CodeBlockPlugin";
+import { $isCodeNode, getDefaultCodeLanguage } from "@lexical/code";
+import ImagePlugin from "./ImagePlugin";
+import YoutubePlugin from "./YoutubePlugin";
 
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
@@ -35,6 +47,10 @@ export default function ToolbarPlugin() {
   const [selectionMap, setSelectionMap] = useState<{ [id: string]: boolean }>(
     {}
   );
+
+  const [blockType, setBlockType] = useState("paragraph");
+  const [codeLanguage, setCodeLanguage] = useState(getDefaultCodeLanguage());
+  const [selectedElementKey, setSelectedElementKey] = useState("");
 
   const updateToolbar = () => {
     const selection = $getSelection();
@@ -51,6 +67,31 @@ export default function ToolbarPlugin() {
         [RichTextAction.Highlight]: selection.hasFormat("highlight"),
       };
       setSelectionMap(newSelectionMap);
+
+      const anchorNode = selection.anchor.getNode();
+      const element =
+        anchorNode.getKey() === "root"
+          ? anchorNode
+          : anchorNode.getTopLevelElementOrThrow();
+      const elementKey = element.getKey();
+      setSelectedElementKey(elementKey);
+      const elementDOM = editor.getElementByKey(elementKey);
+
+      if (!elementDOM) return;
+
+      if ($isListNode(element)) {
+        const parentList = $getNearestNodeOfType(anchorNode, ListNode);
+        const type = parentList ? parentList.getTag() : element.getTag();
+        setBlockType(type);
+      } else {
+        const type = $isHeadingNode(element)
+          ? element.getTag()
+          : element.getType();
+        setBlockType(type);
+        if ($isCodeNode(element)) {
+          setCodeLanguage(element.getLanguage() || getDefaultCodeLanguage());
+        }
+      }
     }
   };
 
@@ -169,36 +210,54 @@ export default function ToolbarPlugin() {
 
   return (
     <Box>
-      <Flex alignItems="center" gap={1}>
-        {RICH_TEXT_OPTIONS.map(({ id, label, icon, fontSize }) =>
-          id === RichTextAction.Divider ? (
-            <Divider />
-          ) : (
-            <IconButton
-              aria-label={label as string}
-              icon={icon}
-              fontSize={fontSize}
-              onClick={() => onAction(id)}
-              isDisabled={disableMap[id]}
-              size="sm"
-              variant="ghost"
-              {...getSelectedBtnProps(selectionMap[id])}
-            />
-          )
+      {blockType !== "code" && (
+        <Flex alignItems="center" gap={1}>
+          {RICH_TEXT_OPTIONS.map(({ id, label, icon, fontSize }) =>
+            id === RichTextAction.Divider ? (
+              <Divider />
+            ) : (
+              <IconButton
+                aria-label={label as string}
+                icon={icon}
+                fontSize={fontSize}
+                onClick={() => onAction(id)}
+                isDisabled={disableMap[id]}
+                size="sm"
+                variant="ghost"
+                {...getSelectedBtnProps(selectionMap[id])}
+              />
+            )
+          )}
+          <Select
+            size="xs"
+            mr={2}
+            placeholder="Select Heading"
+            onChange={(e) => {
+              updateHeading(e.target.value as HeadingTagType);
+            }}
+            width={"140px"}
+          >
+            {HEADINGS.map((heading) => (
+              <option value={heading}>{heading}</option>
+            ))}
+          </Select>
+        </Flex>
+      )}
+      <Flex gap={1}>
+        {blockType !== "code" && (
+          <>
+            <ColorPlugin />
+            <ListPlugin blockType={blockType} />
+            <TablePlugin />
+            <ImagePlugin />
+            <YoutubePlugin />
+          </>
         )}
-        <Select
-          size="xs"
-          mr={2}
-          placeholder="Select Heading"
-          onChange={(e) => {
-            updateHeading(e.target.value as HeadingTagType);
-          }}
-          width={"140px"}
-        >
-          {HEADINGS.map((heading) => (
-            <option value={heading}>{heading}</option>
-          ))}
-        </Select>
+        <CodeBlockPlugin
+          blockType={blockType}
+          selectedElementKey={selectedElementKey}
+          codeLanguage={codeLanguage}
+        />
       </Flex>
     </Box>
   );
