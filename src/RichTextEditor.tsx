@@ -43,8 +43,8 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
               contentEditable={
                 <ContentEditable
                   className={css({
-                    height: 600,
-                    fontSize: 12,
+                    height: 500,
+                    fontSize: 16,
                     padding: 8,
                     overflow: "auto",
                     outline: "none",
@@ -60,7 +60,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
                     color: "#999",
                     top: 8,
                     left: 10,
-                    fontSize: 12,
+                    fontSize: 16,
                   })}
                 >
                   {placeholder}

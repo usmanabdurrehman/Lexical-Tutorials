@@ -28,7 +28,6 @@ export default function CustomOnChangePlugin({
         const parser = new DOMParser();
         const dom = parser.parseFromString(value, "text/html");
         const nodes = $generateNodesFromDOM(editor, dom);
-
         $insertNodes(nodes);
       }
     });

@@ -3,9 +3,8 @@ import { css } from "@emotion/css";
 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $insertNodes } from "lexical";
-import { useEffect } from "react";
 import { Question } from "react-bootstrap-icons";
-import { $createQuestionNode } from "../nodes/QuestionNode";
+import { $createQuestionNode, createOption } from "../nodes/QuestionNode";
 
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
@@ -13,10 +12,11 @@ export default function ToolbarPlugin() {
   const onAddQuestion = () => {
     editor.update(() => {
       const node = $createQuestionNode({
-        question: "What is your cats name",
-        options: [],
+        question: "",
+        options: Array.from({ length: 2 }, (_, i) => i).map((i) =>
+          createOption(``)
+        ),
       });
-      console.log({ node });
       $insertNodes([node]);
     });
   };

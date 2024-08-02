@@ -16,7 +16,7 @@ app.post("/data", (req, res) => {
   text = newText;
   setTimeout(() => {
     res.send({ status: true });
-  }, 2000);
+  }, 500);
 });
 
 app.listen(7000, () => {

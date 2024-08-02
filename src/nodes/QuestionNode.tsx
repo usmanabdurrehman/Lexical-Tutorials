@@ -7,72 +7,77 @@ import {
   DOMExportOutput,
   LexicalNode,
   NodeKey,
+  SerializedLexicalNode,
+  Spread,
 } from "lexical";
 import QuestionComponent from "../Components/Question";
 import { Option } from "../types";
+import { v4 as uuidv4 } from "uuid";
 
 export const $createQuestionNode = ({
   question,
   options,
+  answer,
 }: {
   question: string;
   options: Option[];
+  answer?: string;
 }) => {
-  return new QuestionNode({ question, options });
+  return new QuestionNode({ question, options, answer });
 };
 
 const $convertQuestionElement = (
   domNode: HTMLElement
 ): DOMConversionOutput | null => {
-  const question = domNode.getAttribute("data-lexical-question");
-  const options = domNode.getAttribute("data-lexical-options");
-  if (question !== null && options !== null) {
-    const node = $createQuestionNode({
-      question,
-      options: JSON.parse(options),
-    });
-    return { node };
-  }
-  return null;
-};
+  const question = domNode.getAttribute("data-lexical-question") || "";
+  const options = JSON.parse(
+    domNode.getAttribute("data-lexical-options") || "[]"
+  );
+  const answer = domNode.getAttribute("data-lexical-answer") || "";
 
-function createUID(): string {
-  return Math.random()
-    .toString(36)
-    .replace(/[^a-z]+/g, "")
-    .substr(0, 5);
-}
+  const node = $createQuestionNode({
+    question,
+    options,
+    answer,
+  });
+  return { node };
+};
 
 export function createOption(text = ""): Option {
   return {
     text,
-    uid: createUID(),
+    id: uuidv4(),
   };
 }
 
-function cloneOption(option: Option, text: string): Option {
-  return {
-    text,
-    uid: option.uid,
-  };
-}
+export type SerializedQuestionNode = Spread<
+  {
+    question: string;
+    options: Option[];
+  },
+  SerializedLexicalNode
+>;
 
 export class QuestionNode extends DecoratorNode<JSX.Element> {
   __question: string;
   __options: Option[];
+  __answer: string | undefined;
 
   constructor({
     question,
     options,
     key,
+    answer,
   }: {
     question: string;
     options: Option[];
     key?: NodeKey;
+    answer?: string;
   }) {
     super(key);
     this.__question = question;
     this.__options = options;
+    this.__answer = answer;
   }
 
   static getType(): string {
@@ -83,6 +88,7 @@ export class QuestionNode extends DecoratorNode<JSX.Element> {
     return new QuestionNode({
       question: node.__question,
       options: node.__options,
+      answer: node.__answer,
     });
   }
 
@@ -92,6 +98,7 @@ export class QuestionNode extends DecoratorNode<JSX.Element> {
         nodeKey={this.__key}
         options={this.__options}
         question={this.__question}
+        answer={this.__answer}
       />
     );
   }
@@ -108,6 +115,7 @@ export class QuestionNode extends DecoratorNode<JSX.Element> {
       "data-lexical-options",
       JSON.stringify(this.__options)
     );
+    element.setAttribute("data-lexical-answer", this.__answer || "");
     return { element };
   }
 
@@ -125,28 +133,37 @@ export class QuestionNode extends DecoratorNode<JSX.Element> {
     };
   }
 
-  addOption(option: Option): void {
-    const self = this.getWritable();
-    const options = Array.from(self.__options);
-    options.push(option);
-    self.__options = options;
+  updateDOM(): false {
+    return false;
   }
 
-  deleteOption(option: Option): void {
+  addOption(): void {
     const self = this.getWritable();
-    const options = Array.from(self.__options);
-    const index = options.indexOf(option);
-    options.splice(index, 1);
-    self.__options = options;
+    self.__options = [...self.__options, createOption()];
   }
 
-  setOptionText(option: Option, text: string): void {
+  deleteOption(optionToDelete: Option): void {
     const self = this.getWritable();
-    // const clonedOption = cloneOption(option, text);
-    // const options = Array.from(self.__options);
-    // const index = options.indexOf(option);
-    // options[index] = clonedOption;
-    // self.__options = options;
+    self.__options = self.__options.filter(
+      (option) => option !== optionToDelete
+    );
+  }
+
+  setOptionText(concernedOption: Option, text: string): void {
+    const self = this.getWritable();
+    self.__options = self.__options.map((option) =>
+      option === concernedOption ? { ...option, text } : option
+    );
+  }
+
+  setQuestionText(text: string): void {
+    const self = this.getWritable();
+    self.__question = text;
+  }
+
+  setQuestionAnswer(id: string): void {
+    const self = this.getWritable();
+    self.__answer = id;
   }
 }
 
