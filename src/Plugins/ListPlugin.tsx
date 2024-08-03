@@ -9,42 +9,21 @@ import {
 } from "@lexical/list";
 import { getSelectedBtnProps } from "../utils";
 
-interface ListPluginProps {
-  blockType: string;
-}
+interface ListPluginProps {}
 
-export default function ListPlugin({ blockType }: ListPluginProps) {
+export default function ListPlugin({}: ListPluginProps) {
   const [editor] = useLexicalComposerContext();
 
   return (
     <>
-      <IconButton
-        icon={<ListOl />}
-        aria-label="Add Ordered list"
-        size="sm"
-        variant="ghost"
-        onClick={() => {
-          if (blockType === "ol") {
-            editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
-          } else {
-            editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined);
-          }
-        }}
-        {...getSelectedBtnProps(blockType === "ol")}
-      />
       <IconButton
         icon={<ListUl />}
         aria-label="Add Unordered List"
         size="sm"
         variant="ghost"
         onClick={() => {
-          if (blockType === "ul") {
-            editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
-          } else {
-            editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
-          }
+          editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
         }}
-        {...getSelectedBtnProps(blockType === "ul")}
       />
     </>
   );
