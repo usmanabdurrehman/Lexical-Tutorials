@@ -12,7 +12,7 @@ import { css } from "@emotion/css";
 import { ToolbarPlugin } from "./Plugins";
 import CustomOnChangePlugin from "./Plugins/CustomOnChangePlugin";
 import { theme } from "./theme";
-import { ListNode, ListItemNode } from "@lexical/list";
+import { ListNode, ListItemNode, $createListItemNode } from "@lexical/list";
 import { CustomListNode } from "./nodes/CustomListNode";
 
 interface RichTextEditorProps {
@@ -32,17 +32,25 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
         nodes: [
           ListNode,
           ListItemNode,
+          CustomListNode,
           {
             replace: ListItemNode,
             with: (node: ListItemNode) => {
               console.log({ node });
-              return new CustomListNode();
+              // return "xd";
+              return new CustomListNode(
+                node.__value,
+                node.__checked,
+                node.__key
+              );
             },
           },
         ],
       }),
       [name]
     );
+
+    // $createListItemNode();
 
     return (
       <Box>
