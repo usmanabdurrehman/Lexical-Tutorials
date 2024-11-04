@@ -24,9 +24,6 @@ export default function Form() {
         value={value}
         onChange={(newValue) => setValue(newValue)}
       />
-      <Button colorScheme="whatsapp" size="xs" mt={2} onClick={onSave}>
-        {isPending ? "Saving..." : "Save"}
-      </Button>
     </Box>
   );
 }

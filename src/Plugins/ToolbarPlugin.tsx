@@ -1,17 +1,10 @@
-import { Box, Flex, IconButton, Select } from "@chakra-ui/react";
-import {
-  HEADINGS,
-  LOW_PRIORIRTY,
-  RichTextAction,
-  RICH_TEXT_OPTIONS,
-} from "../constants";
+import { Box, Flex, IconButton } from "@chakra-ui/react";
+import { LOW_PRIORIRTY, RichTextAction, RICH_TEXT_OPTIONS } from "../constants";
 import { Divider } from "../Components/Divider";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import {
   $getSelection,
   $isRangeSelection,
-  CAN_REDO_COMMAND,
-  CAN_UNDO_COMMAND,
   FORMAT_ELEMENT_COMMAND,
   FORMAT_TEXT_COMMAND,
   REDO_COMMAND,
@@ -36,14 +29,11 @@ import TablePlugin from "./TablePlugin";
 import CodeBlockPlugin from "./CodeBlockPlugin";
 import { $isCodeNode, getDefaultCodeLanguage } from "@lexical/code";
 import ImagePlugin from "./ImagePlugin";
-import YoutubePlugin from "./YoutubePlugin";
+import AudioPlugin from "./AudioPlugin";
 
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
-  const [disableMap, setDisableMap] = useState<{ [id: string]: boolean }>({
-    [RichTextAction.Undo]: true,
-    [RichTextAction.Redo]: true,
-  });
+
   const [selectionMap, setSelectionMap] = useState<{ [id: string]: boolean }>(
     {}
   );
@@ -106,28 +96,6 @@ export default function ToolbarPlugin() {
         SELECTION_CHANGE_COMMAND,
         (payload) => {
           updateToolbar();
-          return false;
-        },
-        LOW_PRIORIRTY
-      ),
-      editor.registerCommand(
-        CAN_UNDO_COMMAND,
-        (payload) => {
-          setDisableMap((prevDisableMap) => ({
-            ...prevDisableMap,
-            undo: !payload,
-          }));
-          return false;
-        },
-        LOW_PRIORIRTY
-      ),
-      editor.registerCommand(
-        CAN_REDO_COMMAND,
-        (payload) => {
-          setDisableMap((prevDisableMap) => ({
-            ...prevDisableMap,
-            redo: !payload,
-          }));
           return false;
         },
         LOW_PRIORIRTY
@@ -198,67 +166,36 @@ export default function ToolbarPlugin() {
 
   useKeyBindings({ onAction });
 
-  const updateHeading = (heading: HeadingTagType) => {
-    editor.update(() => {
-      const selection = $getSelection();
-
-      if ($isRangeSelection(selection)) {
-        $wrapNodes(selection, () => $createHeadingNode(heading));
-      }
-    });
-  };
-
   return (
-    <Box>
-      {blockType !== "code" && (
-        <Flex alignItems="center" gap={1}>
-          {RICH_TEXT_OPTIONS.map(({ id, label, icon, fontSize }) =>
-            id === RichTextAction.Divider ? (
-              <Divider />
-            ) : (
-              <IconButton
-                aria-label={label as string}
-                icon={icon}
-                fontSize={fontSize}
-                onClick={() => onAction(id)}
-                isDisabled={disableMap[id]}
-                size="sm"
-                variant="ghost"
-                {...getSelectedBtnProps(selectionMap[id])}
-              />
-            )
-          )}
-          <Select
-            size="xs"
-            mr={2}
-            placeholder="Select Heading"
-            onChange={(e) => {
-              updateHeading(e.target.value as HeadingTagType);
-            }}
-            width={"140px"}
-          >
-            {HEADINGS.map((heading) => (
-              <option value={heading}>{heading}</option>
-            ))}
-          </Select>
-        </Flex>
-      )}
-      <Flex gap={1}>
-        {blockType !== "code" && (
-          <>
-            <ColorPlugin />
-            <ListPlugin blockType={blockType} />
-            <TablePlugin />
-            <ImagePlugin />
-            <YoutubePlugin />
-          </>
-        )}
+    <Box bg="#f9f9f9">
+      <Flex alignItems="center">
+        {RICH_TEXT_OPTIONS.map(({ id, label, icon }) => (
+          <IconButton
+            aria-label={label as string}
+            icon={icon}
+            onClick={() => onAction(id)}
+            size="sm"
+            variant="ghost"
+            {...getSelectedBtnProps(selectionMap[id])}
+          />
+        ))}
+        <Divider />
+        L
+        <Divider />
+        <ListPlugin blockType={blockType} />
+        <Divider />
+        Q
+        <Divider />
         <CodeBlockPlugin
           blockType={blockType}
           selectedElementKey={selectedElementKey}
           codeLanguage={codeLanguage}
         />
       </Flex>
+
+      {/* <Flex gap={1}>
+        <AudioPlugin />
+      </Flex> */}
     </Box>
   );
 }

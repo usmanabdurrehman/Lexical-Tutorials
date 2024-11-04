@@ -17,7 +17,8 @@ import { ListNode, ListItemNode } from "@lexical/list";
 import { TableNode, TableCellNode, TableRowNode } from "@lexical/table";
 import { CodeNode, CodeHighlightNode } from "@lexical/code";
 import { ImageNode } from "./nodes/ImageNode";
-import { YoutubeNode } from "./nodes/YoutubeNode";
+import { AudioNode } from "./nodes/AudioNode";
+import AudioVisualizerWrapper from "./Components/AudioVisualizer";
 
 interface RichTextEditorProps {
   value: string;
@@ -43,17 +44,17 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
           CodeNode,
           CodeHighlightNode,
           ImageNode,
-          YoutubeNode,
+          AudioNode,
         ],
       }),
       [name]
     );
 
     return (
-      <Box>
+      <Box border="1px solid #ccc" borderRadius="4px">
         <LexicalComposer initialConfig={initialConfig}>
           <ToolbarPlugin />
-          <Box pos="relative" height={350}>
+          <Box pos="relative">
             <RichTextPlugin
               contentEditable={
                 <ContentEditable
@@ -63,8 +64,6 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
                     padding: 8,
                     overflow: "auto",
                     outline: "none",
-                    border: "1px solid black",
-                    borderRadius: "4px",
                   })}
                 />
               }
@@ -88,6 +87,8 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
           <HistoryPlugin />
           <ListPlugin />
           <CustomOnChangePlugin value={value} onChange={onChange} />
+
+          {/* <AudioVisualizerWrapper /> */}
         </LexicalComposer>
       </Box>
     );

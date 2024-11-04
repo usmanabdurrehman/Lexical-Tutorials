@@ -21,6 +21,7 @@
     "framer-motion": "^10.11.2",
     "lexical": "^0.16.0",
     "react": "^18.2.0",
+    "react-audio-visualize": "^1.2.0",
     "react-bootstrap-icons": "^1.11.4",
     "react-color": "^2.19.3",
     "react-dom": "^18.2.0"

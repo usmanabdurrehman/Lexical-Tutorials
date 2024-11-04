@@ -1,7 +1,7 @@
 export const getSelectedBtnProps = (isSelected: boolean) =>
   isSelected
     ? {
-        colorScheme: "blue",
+        colorScheme: "gray",
         variant: "solid",
       }
     : { color: "#444" };

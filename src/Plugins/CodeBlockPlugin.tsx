@@ -59,13 +59,6 @@ export default function CodeBlockPlugin({
         variant="ghost"
         onClick={onAddCodeBlock}
       />
-      {blockType && (
-        <Select size="sm" value={codeLanguage} onChange={onLanguageChange}>
-          {lanugages.map((language) => (
-            <option value={language}>{language}</option>
-          ))}
-        </Select>
-      )}
     </Flex>
   );
 }

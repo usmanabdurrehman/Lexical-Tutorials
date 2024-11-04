@@ -3056,6 +3056,11 @@ raw-body@2.5.2:
     iconv-lite "0.4.24"
     unpipe "1.0.0"
 
+react-audio-visualize@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-audio-visualize/-/react-audio-visualize-1.2.0.tgz#b53f79223da2e4117ffbb37cdfd5b5ceb1d1dd4e"
+  integrity sha512-rfO5nmT0fp23gjU0y2WQT6+ZOq2ZsuPTMphchwX1PCz1Di4oaIr6x7JZII8MLrbHdG7UB0OHfGONTIsWdh67kQ==
+
 react-bootstrap-icons@^1.11.4:
   version "1.11.4"
   resolved "https://registry.yarnpkg.com/react-bootstrap-icons/-/react-bootstrap-icons-1.11.4.tgz#f4d5a852af58b5e0523df7162758b77f6fef2eec"
