@@ -37,6 +37,14 @@ export default function CustomOnChangePlugin({
     setIsFirstRender(true);
   }, [value]);
 
+  // useEffect(() => {
+  //   const parser = new DOMParser();
+  //   const dom = parser.parseFromString(value, "text/html");
+  //   editor.update(() => {
+  //     console.log({ nodes: $generateNodesFromDOM(editor, dom) });
+  //   });
+  // }, [value, editor]);
+
   return (
     <OnChangePlugin
       onChange={(editorState) => {

@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
@@ -9,11 +9,26 @@ import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { css } from "@emotion/css";
 import { ToolbarPlugin } from "./Plugins";
-import { EditorThemeClasses } from "lexical";
+import { EditorConfig, EditorThemeClasses } from "lexical";
 import CustomOnChangePlugin from "./Plugins/CustomOnChangePlugin";
 import { QuestionNode } from "./nodes/QuestionNode";
+import { TagNode } from "./nodes/TagNode";
 
-const theme: EditorThemeClasses = {};
+const theme: EditorThemeClasses = {
+  text: {
+    bold: css({ fontWeight: "bold" }),
+    underline: css({ textDecoration: "underline" }),
+    strikethrough: css({ textDecoration: "line-through" }),
+    underlineStrikethrough: css({ textDecoration: "underline line-through" }),
+    italic: css({ fontStyle: "italic" }),
+    code: css({
+      color: "black",
+      padding: 2,
+      background: "#eee",
+      border: "1px solid #ccc",
+    }),
+  },
+};
 
 interface RichTextEditorProps {
   value: string;
@@ -29,10 +44,15 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
         namespace: name,
         theme,
         onError: () => {},
-        nodes: [QuestionNode],
+        nodes: [QuestionNode, TagNode],
+        // editable: false,
       }),
       [name]
     );
+
+    useEffect(() => {
+      console.log({ value });
+    }, [value]);
 
     return (
       <Box>
@@ -71,7 +91,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
           </Box>
           <AutoFocusPlugin />
           <HistoryPlugin />
-          <CustomOnChangePlugin value={value} onChange={onChange} />
+          {/* <CustomOnChangePlugin value={value} onChange={onChange} /> */}
         </LexicalComposer>
       </Box>
     );

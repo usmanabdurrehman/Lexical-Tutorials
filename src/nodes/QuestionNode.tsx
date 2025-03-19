@@ -54,6 +54,7 @@ export type SerializedQuestionNode = Spread<
   {
     question: string;
     options: Option[];
+    answer: string | undefined;
   },
   SerializedLexicalNode
 >;
@@ -133,13 +134,28 @@ export class QuestionNode extends DecoratorNode<JSX.Element> {
     };
   }
 
+  static importJSON(serializedNode: SerializedQuestionNode): QuestionNode {
+    return $createQuestionNode(serializedNode).updateFromJSON(serializedNode);
+  }
+
+  exportJSON(): SerializedQuestionNode {
+    return {
+      ...super.exportJSON(),
+      question: this.__question,
+      answer: this.__answer,
+      options: this.__options,
+    };
+  }
+
   updateDOM(): false {
     return false;
   }
 
   addOption(): void {
     const self = this.getWritable();
+    console.log(this);
     self.__options = [...self.__options, createOption()];
+    console.log(self);
   }
 
   deleteOption(optionToDelete: Option): void {
@@ -157,11 +173,13 @@ export class QuestionNode extends DecoratorNode<JSX.Element> {
   }
 
   setQuestionText(text: string): void {
+    console.log({ text });
     const self = this.getWritable();
     self.__question = text;
   }
 
   setQuestionAnswer(id: string): void {
+    console.log("ayo", id);
     const self = this.getWritable();
     self.__answer = id;
   }

@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { X } from "react-bootstrap-icons";
 
-function PollOptionComponent({
+function QuestionOption({
   option,
   index,
   options,
@@ -71,6 +71,9 @@ export default function QuestionComponent({
   answer: string | undefined;
 }): JSX.Element {
   const [editor] = useLexicalComposerContext();
+  console.log({ options, answer });
+
+  const isEditable = editor.isEditable();
 
   const updateNode = (
     cb: (node: QuestionNode) => void,
@@ -116,7 +119,7 @@ export default function QuestionComponent({
           {options.map((option, index) => {
             const key = option.id;
             return (
-              <PollOptionComponent
+              <QuestionOption
                 key={key}
                 updateNode={updateNode}
                 option={option}
