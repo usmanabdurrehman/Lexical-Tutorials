@@ -17,9 +17,6 @@ import {
   FORMAT_TEXT_COMMAND,
   SELECTION_CHANGE_COMMAND,
 } from "lexical";
-import { Question, Tag } from "react-bootstrap-icons";
-import { $createQuestionNode, createOption } from "../nodes/QuestionNode";
-import { $createTagNode } from "../nodes/TagNode";
 import { LOW_PRIORIRTY, RICH_TEXT_OPTIONS, RichTextAction } from "../constants";
 import { mergeRegister } from "@lexical/utils";
 import { useEffect, useState } from "react";
@@ -129,23 +126,6 @@ export default function ToolbarPlugin() {
         }
       : {};
 
-  const onAddQuestion = () => {
-    editor.update(() => {
-      const node = $createQuestionNode({
-        question: "",
-        options: [createOption(), createOption()],
-      });
-      $insertNodes([node]);
-    });
-  };
-
-  const onAddTag = () => {
-    editor.update(() => {
-      const node = $createTagNode("Nice Tag");
-      $insertNodes([node]);
-    });
-  };
-
   const buttonGroupProps = {
     size: "md",
     isAttached: true,
@@ -174,14 +154,7 @@ export default function ToolbarPlugin() {
           )
         )}
       </ButtonGroup>
-      <ButtonGroup {...buttonGroupProps}>
-        <IconButton aria-label="Add Tag" icon={<Tag />} onClick={onAddTag} />
-        <IconButton
-          aria-label="Add Question"
-          icon={<Question />}
-          onClick={onAddQuestion}
-        />
-      </ButtonGroup>
+      <ButtonGroup {...buttonGroupProps}></ButtonGroup>
     </Flex>
   );
 }

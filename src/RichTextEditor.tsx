@@ -11,9 +11,6 @@ import { css } from "@emotion/css";
 import { ToolbarPlugin } from "./Plugins";
 import { EditorConfig, EditorThemeClasses, TextNode } from "lexical";
 import CustomOnChangePlugin from "./Plugins/CustomOnChangePlugin";
-import { QuestionNode } from "./nodes/QuestionNode";
-import { TagNode } from "./nodes/TagNode";
-import { ExtendedTextNode } from "./nodes/ExtendedTextNode";
 
 const theme: EditorThemeClasses = {
   text: {
@@ -45,19 +42,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
         namespace: name,
         theme,
         onError: () => {},
-        nodes: [
-          QuestionNode,
-          TagNode,
-          ExtendedTextNode,
-          {
-            replace: TextNode,
-            with: (node: TextNode) => new ExtendedTextNode(node.__text),
-            withKlass: ExtendedTextNode,
-          },
-        ],
-
-        // editable: false,
-        // editorState:
+        nodes: [],
       }),
       [name]
     );
