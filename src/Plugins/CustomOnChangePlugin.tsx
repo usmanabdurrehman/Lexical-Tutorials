@@ -22,7 +22,6 @@ export default function CustomOnChangePlugin({
     setIsFirstRender(false);
     editor.update(() => {
       const currentHTML = $generateHtmlFromNodes(editor);
-
       if (currentHTML !== value) {
         $getRoot().clear();
         const parser = new DOMParser();
@@ -48,6 +47,8 @@ export default function CustomOnChangePlugin({
   return (
     <OnChangePlugin
       onChange={(editorState) => {
+        const json = editorState.toJSON();
+        console.log({ json, editorState });
         editorState.read(() => {
           onChange($generateHtmlFromNodes(editor));
         });

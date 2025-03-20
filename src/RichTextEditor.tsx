@@ -9,10 +9,11 @@ import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { css } from "@emotion/css";
 import { ToolbarPlugin } from "./Plugins";
-import { EditorConfig, EditorThemeClasses } from "lexical";
+import { EditorConfig, EditorThemeClasses, TextNode } from "lexical";
 import CustomOnChangePlugin from "./Plugins/CustomOnChangePlugin";
 import { QuestionNode } from "./nodes/QuestionNode";
 import { TagNode } from "./nodes/TagNode";
+import { ExtendedTextNode } from "./nodes/ExtendedTextNode";
 
 const theme: EditorThemeClasses = {
   text: {
@@ -44,8 +45,19 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
         namespace: name,
         theme,
         onError: () => {},
-        nodes: [QuestionNode, TagNode],
+        nodes: [
+          QuestionNode,
+          TagNode,
+          ExtendedTextNode,
+          {
+            replace: TextNode,
+            with: (node: TextNode) => new ExtendedTextNode(node.__text),
+            withKlass: ExtendedTextNode,
+          },
+        ],
+
         // editable: false,
+        // editorState:
       }),
       [name]
     );
@@ -91,7 +103,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
           </Box>
           <AutoFocusPlugin />
           <HistoryPlugin />
-          {/* <CustomOnChangePlugin value={value} onChange={onChange} /> */}
+          <CustomOnChangePlugin value={value} onChange={onChange} />
         </LexicalComposer>
       </Box>
     );

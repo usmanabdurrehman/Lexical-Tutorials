@@ -23,11 +23,8 @@ function QuestionOption({
   index: number;
   option: Option;
   options: Option[];
-  updateNode: (
-    cb: (QuestionNode: QuestionNode) => void,
-    onSelect?: () => void
-  ) => void;
-}): JSX.Element {
+  updateNode: (cb: (QuestionNode: QuestionNode) => void) => void;
+}) {
   return (
     <Flex alignItems="center" gap={2}>
       <Radio value={option.id} />
@@ -69,25 +66,18 @@ export default function QuestionComponent({
   options: Option[];
   question: string;
   answer: string | undefined;
-}): JSX.Element {
+}) {
   const [editor] = useLexicalComposerContext();
-  console.log({ options, answer });
 
   const isEditable = editor.isEditable();
 
-  const updateNode = (
-    cb: (node: QuestionNode) => void,
-    onUpdate?: () => void
-  ): void => {
-    editor.update(
-      () => {
-        const node = $getNodeByKey(nodeKey);
-        if ($isQuestionNode(node)) {
-          cb(node as QuestionNode);
-        }
-      },
-      { onUpdate }
-    );
+  const updateNode = (cb: (node: QuestionNode) => void): void => {
+    editor.update(() => {
+      const node = $getNodeByKey(nodeKey);
+      if ($isQuestionNode(node)) {
+        cb(node);
+      }
+    });
   };
 
   return (
@@ -97,7 +87,23 @@ export default function QuestionComponent({
       p={3}
       border="2px solid #3b3bee"
       borderRadius="lg"
+      pos="relative"
+      role="group"
     >
+      <IconButton
+        pos="absolute"
+        aria-label="Remove Node"
+        icon={<X />}
+        size={"xs"}
+        top={-2}
+        right={-2}
+        zIndex={1}
+        display="none"
+        _groupHover={{ display: "flex" }}
+        onClick={() => {
+          updateNode((node) => node.remove());
+        }}
+      />
       <Input
         value={question}
         placeholder="Question"

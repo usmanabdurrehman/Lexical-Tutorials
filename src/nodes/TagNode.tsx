@@ -1,6 +1,13 @@
-import { EditorConfig, LexicalNode, NodeKey, TextNode } from "lexical";
+import {
+  EditorConfig,
+  LexicalNode,
+  NodeKey,
+  SerializedTextNode,
+  TextNode,
+} from "lexical";
+import { ExtendedTextNode } from "./ExtendedTextNode";
 
-export class TagNode extends TextNode {
+export class TagNode extends ExtendedTextNode {
   constructor(text: string, key?: NodeKey) {
     super(text, key);
   }
@@ -18,9 +25,6 @@ export class TagNode extends TextNode {
     // The DOM Element for your Node
     const element = super.createDOM(config);
 
-    // Since super.createDOM just makes a span tag with text inside. Can do this as well
-    // const element = document.createElement("span");
-    // element.replaceChildren(this.__text);
     element.style.background = "#f4f4f4";
     element.style.padding = "4px 8px";
     element.style.borderRadius = "18px";
@@ -29,18 +33,18 @@ export class TagNode extends TextNode {
     return element;
   }
 
-  //  static importJSON(serializedNode: SerializedTagNode): TagNode {
-  //     return $createTagNode(serializedNode).updateFromJSON(serializedNode);
-  //   }
+  updateDOM(): boolean {
+    return false;
+  }
 
-  //   exportJSON(): SerializedQuestionNode {
-  //     return {
-  //       ...super.exportJSON(),
-  //       question: this.__question,
-  //       answer: this.__answer,
-  //       options: this.__options,
-  //     };
-  //   }
+  static importJSON(serializedNode: SerializedTextNode): TagNode {
+    return $createTagNode(serializedNode.text).updateFromJSON(serializedNode);
+  }
+
+  // no need to add exportJSON here, since we are not adding any new properties
+  // exportJSON(): SerializedTextNode {
+  //   return super.exportJSON();
+  // }
 }
 
 export function $createTagNode(text: string): TagNode {

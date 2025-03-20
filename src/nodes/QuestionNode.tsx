@@ -1,5 +1,3 @@
-// https://github.dev/facebook/lexical/blob/main/packages/lexical-playground/src/nodes/QuestionNode.tsx
-
 import {
   DecoratorNode,
   DOMConversionMap,
@@ -64,17 +62,15 @@ export class QuestionNode extends DecoratorNode<JSX.Element> {
   __options: Option[];
   __answer: string | undefined;
 
-  constructor({
-    question,
-    options,
-    key,
-    answer,
-  }: {
-    question: string;
-    options: Option[];
-    key?: NodeKey;
-    answer?: string;
-  }) {
+  constructor(
+    params: {
+      question: string;
+      options: Option[];
+      answer?: string;
+    },
+    key?: NodeKey
+  ) {
+    const { question, options, answer } = params;
     super(key);
     this.__question = question;
     this.__options = options;
@@ -86,11 +82,23 @@ export class QuestionNode extends DecoratorNode<JSX.Element> {
   }
 
   static clone(node: QuestionNode): QuestionNode {
-    return new QuestionNode({
-      question: node.__question,
-      options: node.__options,
-      answer: node.__answer,
-    });
+    return new QuestionNode(
+      {
+        question: node.__question,
+        options: node.__options,
+        answer: node.__answer,
+      },
+      node.__key
+    );
+  }
+
+  createDOM(): HTMLElement {
+    const span = document.createElement("span");
+    return span;
+  }
+
+  updateDOM(): false {
+    return false;
   }
 
   decorate(): JSX.Element {
@@ -104,9 +112,33 @@ export class QuestionNode extends DecoratorNode<JSX.Element> {
     );
   }
 
-  createDOM(): HTMLElement {
-    const span = document.createElement("span");
-    return span;
+  addOption(): void {
+    const self = this.getWritable();
+    self.__options = [...self.__options, createOption()];
+  }
+
+  deleteOption(optionToDelete: Option): void {
+    const self = this.getWritable();
+    self.__options = self.__options.filter(
+      (option) => option !== optionToDelete
+    );
+  }
+
+  setOptionText(concernedOption: Option, text: string): void {
+    const self = this.getWritable();
+    self.__options = self.__options.map((option) =>
+      option === concernedOption ? { ...option, text } : option
+    );
+  }
+
+  setQuestionText(text: string): void {
+    const self = this.getWritable();
+    self.__question = text;
+  }
+
+  setQuestionAnswer(id: string): void {
+    const self = this.getWritable();
+    self.__answer = id;
   }
 
   exportDOM(): DOMExportOutput {
@@ -145,43 +177,6 @@ export class QuestionNode extends DecoratorNode<JSX.Element> {
       answer: this.__answer,
       options: this.__options,
     };
-  }
-
-  updateDOM(): false {
-    return false;
-  }
-
-  addOption(): void {
-    const self = this.getWritable();
-    console.log(this);
-    self.__options = [...self.__options, createOption()];
-    console.log(self);
-  }
-
-  deleteOption(optionToDelete: Option): void {
-    const self = this.getWritable();
-    self.__options = self.__options.filter(
-      (option) => option !== optionToDelete
-    );
-  }
-
-  setOptionText(concernedOption: Option, text: string): void {
-    const self = this.getWritable();
-    self.__options = self.__options.map((option) =>
-      option === concernedOption ? { ...option, text } : option
-    );
-  }
-
-  setQuestionText(text: string): void {
-    console.log({ text });
-    const self = this.getWritable();
-    self.__question = text;
-  }
-
-  setQuestionAnswer(id: string): void {
-    console.log("ayo", id);
-    const self = this.getWritable();
-    self.__answer = id;
   }
 }
 

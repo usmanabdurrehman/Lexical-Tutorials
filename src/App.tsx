@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ChakraProvider } from "@chakra-ui/react";
-import { RichTextEditor } from "./RichTextEditor";
 import Form from "./Form";
+import "./App.css";
 
 const queryClient = new QueryClient({
   defaultOptions: {

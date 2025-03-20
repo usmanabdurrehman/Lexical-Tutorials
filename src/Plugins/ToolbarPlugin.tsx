@@ -133,9 +133,7 @@ export default function ToolbarPlugin() {
     editor.update(() => {
       const node = $createQuestionNode({
         question: "",
-        options: Array.from({ length: 2 }, (_, i) => i).map((i) =>
-          createOption(``)
-        ),
+        options: [createOption(), createOption()],
       });
       $insertNodes([node]);
     });
