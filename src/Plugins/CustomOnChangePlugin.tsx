@@ -47,6 +47,8 @@ export default function CustomOnChangePlugin({
   return (
     <OnChangePlugin
       onChange={(editorState) => {
+        // const json = editorState.toJSON();
+        // console.log({ json });
         editorState.read(() => {
           onChange($generateHtmlFromNodes(editor));
         });

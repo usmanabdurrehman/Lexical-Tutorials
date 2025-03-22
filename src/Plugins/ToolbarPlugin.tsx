@@ -21,6 +21,9 @@ import { LOW_PRIORIRTY, RICH_TEXT_OPTIONS, RichTextAction } from "../constants";
 import { mergeRegister } from "@lexical/utils";
 import { useEffect, useState } from "react";
 import { Divider } from "../Components/Divider";
+import { Question, Tag } from "react-bootstrap-icons";
+import { $createTagNode } from "../nodes/TagNode";
+import { $createQuestionNode } from "../nodes/QuestionNode";
 
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
@@ -137,6 +140,20 @@ export default function ToolbarPlugin() {
     }),
   };
 
+  const onAddTag = () => {
+    editor.update(() => {
+      const node = $createTagNode("Nice Tag");
+      $insertNodes([node]);
+    });
+  };
+
+  const onAddQuestion = () => {
+    editor.update(() => {
+      const node = $createQuestionNode({ question: "What?", options: [] });
+      $insertNodes([node]);
+    });
+  };
+
   return (
     <Flex gap={2} direction={"column"}>
       <ButtonGroup {...buttonGroupProps}>
@@ -154,7 +171,14 @@ export default function ToolbarPlugin() {
           )
         )}
       </ButtonGroup>
-      <ButtonGroup {...buttonGroupProps}></ButtonGroup>
+      <ButtonGroup {...buttonGroupProps}>
+        <IconButton aria-label="Add Tag" icon={<Tag />} onClick={onAddTag} />
+        <IconButton
+          aria-label="Add Question"
+          icon={<Question />}
+          onClick={onAddQuestion}
+        />
+      </ButtonGroup>
     </Flex>
   );
 }
