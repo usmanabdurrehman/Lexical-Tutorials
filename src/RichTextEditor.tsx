@@ -59,9 +59,9 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
       [name]
     );
 
-    // useEffect(() => {
-    //   console.log({ value });
-    // }, [value]);
+    useEffect(() => {
+      console.log({ value });
+    }, [value]);
 
     return (
       <Box>

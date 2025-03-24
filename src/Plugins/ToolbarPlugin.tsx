@@ -149,7 +149,13 @@ export default function ToolbarPlugin() {
 
   const onAddQuestion = () => {
     editor.update(() => {
-      const node = $createQuestionNode({ question: "What?", options: [] });
+      const node = $createQuestionNode({
+        question: "What?",
+        options: [
+          { id: "1", text: "Option 1" },
+          { id: "2", text: "Option 2" },
+        ],
+      });
       $insertNodes([node]);
     });
   };
