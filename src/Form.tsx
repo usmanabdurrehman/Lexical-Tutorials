@@ -16,6 +16,10 @@ export default function Form() {
     saveText(value);
   };
 
+  useEffect(() => {
+    console.log({ value });
+  }, [value]);
+
   return (
     <Box p={2}>
       <RichTextEditor

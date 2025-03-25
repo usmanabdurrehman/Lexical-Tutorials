@@ -12,8 +12,10 @@ import { css } from "@emotion/css";
 import { ToolbarPlugin } from "./Plugins";
 import CustomOnChangePlugin from "./Plugins/CustomOnChangePlugin";
 import { theme } from "./theme";
-import { ListNode, ListItemNode, $createListItemNode } from "@lexical/list";
+import { ListNode, ListItemNode } from "@lexical/list";
 import { CustomListNode } from "./nodes/CustomListNode";
+import { ParagraphNode } from "lexical";
+import { CustomParagraphNode } from "./nodes/CustomParagraphNode";
 
 interface RichTextEditorProps {
   value: string;
@@ -35,22 +37,19 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
           CustomListNode,
           {
             replace: ListItemNode,
-            with: (node: ListItemNode) => {
-              console.log({ node });
-              // return "xd";
-              return new CustomListNode(
-                node.__value,
-                node.__checked,
-                node.__key
-              );
-            },
+            with: () => new CustomListNode(),
+            withKlass: CustomListNode,
+          },
+          CustomParagraphNode,
+          {
+            replace: ParagraphNode,
+            with: () => new CustomParagraphNode(),
+            withKlass: CustomParagraphNode,
           },
         ],
       }),
       [name]
     );
-
-    // $createListItemNode();
 
     return (
       <Box>
@@ -70,19 +69,6 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
                     borderRadius: "4px",
                   })}
                 />
-              }
-              placeholder={
-                <Box
-                  className={css({
-                    position: "absolute",
-                    color: "#999",
-                    top: 8,
-                    left: 10,
-                    fontSize: 12,
-                  })}
-                >
-                  {placeholder}
-                </Box>
               }
               ErrorBoundary={LexicalErrorBoundary}
             />
