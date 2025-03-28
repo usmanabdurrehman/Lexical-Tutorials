@@ -13,6 +13,9 @@ import { ToolbarPlugin } from "./Plugins";
 import CustomOnChangePlugin from "./Plugins/CustomOnChangePlugin";
 import { theme } from "./theme";
 import { ListNode, ListItemNode } from "@lexical/list";
+import { CustomParagraphNode } from "./nodes/CustomParagraphNode";
+import { ParagraphNode } from "lexical";
+import { CustomListItemNode } from "./nodes/CustomListItemNode";
 
 interface RichTextEditorProps {
   value: string;
@@ -28,7 +31,22 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
         namespace: name,
         theme,
         onError: () => {},
-        nodes: [ListNode, ListItemNode],
+        nodes: [
+          ListNode,
+          ListItemNode,
+          CustomParagraphNode,
+          {
+            replace: ParagraphNode,
+            with: () => new CustomParagraphNode(),
+            withKlass: CustomParagraphNode,
+          },
+          CustomListItemNode,
+          {
+            replace: ListItemNode,
+            with: () => new CustomListItemNode(),
+            withKlass: CustomListItemNode,
+          },
+        ],
       }),
       [name]
     );
