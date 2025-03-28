@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import React, { useMemo } from "react";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 
@@ -13,9 +13,6 @@ import { ToolbarPlugin } from "./Plugins";
 import CustomOnChangePlugin from "./Plugins/CustomOnChangePlugin";
 import { theme } from "./theme";
 import { ListNode, ListItemNode } from "@lexical/list";
-import { CustomListNode } from "./nodes/CustomListNode";
-import { ParagraphNode } from "lexical";
-import { CustomParagraphNode } from "./nodes/CustomParagraphNode";
 
 interface RichTextEditorProps {
   value: string;
@@ -31,22 +28,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = React.memo(
         namespace: name,
         theme,
         onError: () => {},
-        nodes: [
-          ListNode,
-          ListItemNode,
-          CustomListNode,
-          {
-            replace: ListItemNode,
-            with: () => new CustomListNode(),
-            withKlass: CustomListNode,
-          },
-          CustomParagraphNode,
-          {
-            replace: ParagraphNode,
-            with: () => new CustomParagraphNode(),
-            withKlass: CustomParagraphNode,
-          },
-        ],
+        nodes: [ListNode, ListItemNode],
       }),
       [name]
     );
